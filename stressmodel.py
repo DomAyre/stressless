@@ -1,0 +1,2 @@
+class stressModel():
+    pass
