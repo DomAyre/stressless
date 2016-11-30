@@ -3,6 +3,7 @@ from supportFunctions import *
 from stressmodel import StressModel, Reading
 import os
 import csv
+import requests
 from collections import defaultdict
 
 
@@ -17,10 +18,12 @@ class StressLevel():
         self.averageModel = self._getModelAverage()
 
     def _readFileIntoModel(self, filename):
+        model = defaultdict()
         with open(filename, 'rb') as csvfile:
             data = csv.reader(csvfile, delimiter=',')
             print(data)  # debugging
-        model = defaultdict(data)
+        for d in data:
+            model[d[0]].append(tuple(d[1:]))
         return model
 
     def _getModelAverage(self):
@@ -28,7 +31,6 @@ class StressLevel():
         for k in self.model:
             average_model[k] = sum([v for v in self.model[k]]) / len(self.model[k])
         return average_model
-
 
     def saveModel(self, filename=False):
         if not filename:
@@ -39,6 +41,7 @@ class StressLevel():
 
     def addReading(self, stressLevel, pressures):
         self.model[stressLevel] = tuple(pressures)
+
 
 class StressLess():
     def __init__(self, filename="temp.learn"):
@@ -100,7 +103,7 @@ class StressLess():
         pass
 
     def adjust_threshold(self, squeeze_pressure_readings, non_squeeze_pressure_readings):
-        avg_squeeze_reading = sum(sum(r) for r in squeeze_pressure_readings)
+        avg_squeeze_reading = sum(sum(r) for r in 2squeeze_pressure_readings)
         avg_non_squeeze_reading = sum(sum(r) for r in non_squeeze_pressure_readings)
         self._device.setPressureThreshold((avg_squeeze_reading + avg_non_squeeze_reading) / 2)
 
@@ -117,3 +120,8 @@ class StressLess():
 
     def setSensorFrequency(self, frequency):
         self._device.setReadingFrequency()
+
+    def sendIFTT(self, command="turns_on", payload=[], key="dKx0NTPTbFi1jLPW3MlCxA"):
+        if len(payload) > 3:
+            raise Exception('payload has to have up to 3 arguments')
+        requests.post("https://maker.ifttt.com/trigger/{command}/with/key/{key}", data=payload)
