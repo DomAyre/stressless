@@ -1,5 +1,4 @@
-import socket
-
+from arduinointerface import ArduinoInterface
 
 class Reading():
     def __init__(self, data):
@@ -23,14 +22,7 @@ class StressModel():
         self.average = []
         self.frequency = 1
         self.threshold = 0
-        self.setupSocket()
-
-    def __del__(self):        
-        self.sock.close
-
-    def setupSocket(self):
-        self.sock = socket.socket()
-        self.sock.connect(("localhost", 8080))
+        self.interface = ArduinoInterface()
 
     def readData_temp(self):
         current_size = len(self.data)
@@ -43,7 +35,7 @@ class StressModel():
         return self.average
 
     def readData(self):        
-        data = self.sock.recv(4)
+        self.data.add(self.interface.getData())
         print(data)
         # data = [0, [0,30,10]]           # placeholder for the future. Should read data from device
         # reading = Reading(data)
