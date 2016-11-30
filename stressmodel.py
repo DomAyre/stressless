@@ -1,13 +1,25 @@
+import socket
+
 class StressModel():
     def __init__(self):
         self.data = []  # list of reading objects
         self.average = []
         self.frequency = 1
         self.threshold = 0
+        self.setupSocket()
 
-    def readData(self):
-        data = [0, [0,30,10]]  # placeholder for the future. Should read data from device
-        reading = Reading(data)
+    def __del__(self):        
+        self.sock.close
+
+    def setupSocket(self):
+        self.sock = socket.socket()
+        self.sock.connect(("localhost", 8080))
+
+    def readData(self):        
+        data = self.sock.recv(4)
+        print data
+        # data = [0, [0,30,10]]           # placeholder for the future. Should read data from device
+        # reading = Reading(data)
 
     def set_average(self):
         self.average = sum(self.data)/len(self.data)
