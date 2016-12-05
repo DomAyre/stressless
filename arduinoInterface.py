@@ -9,14 +9,14 @@ class ArduinoInterface:
 
         with serial.Serial(devFile, 9600, timeout=1) as ser:
             # Clear buffered things before starting afresh
-            ser.reset_input_buffer()
+            self.ser.reset_input_buffer()
 
     def getData(self):
         
-        self.line = ser.readline()
+        self.line = self.ser.readline()
 
         # Line contains newline char
-        self.line = line[0:-1]
+        self.line = self.line[0:-1]
 
         if len(self.line) == 0:
             return
@@ -31,7 +31,7 @@ class ArduinoInterface:
         ser.write(cmd)
         ser.write(data)
 
-        return line
+        return self.line
 
         # code.interact(local=dict(globals(), **locals()))
 
