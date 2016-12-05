@@ -7,12 +7,13 @@ class ArduinoInterface:
     def __init__(self, devFile):
         # For Joy's MBP, device file is /dev/cu.usbmodem1411
 
-        with serial.Serial(devFile, 9600, timeout=1) as ser:
-            # Clear buffered things before starting afresh
-            self.ser.reset_input_buffer()
+        self.ser = serial.Serial(devFile, 9600, timeout=1);
+
+        # Clear buffered things before starting afresh
+        self.ser.reset_input_buffer()
 
     def getData(self):
-        
+
         self.line = self.ser.readline()
 
         # Line contains newline char
@@ -28,8 +29,8 @@ class ArduinoInterface:
         data = '1337\n'
 
         # Maybe send something to Arduino
-        ser.write(cmd)
-        ser.write(data)
+        self.ser.write(cmd)
+        self.ser.write(data)
 
         return self.line
 

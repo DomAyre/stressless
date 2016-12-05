@@ -19,25 +19,25 @@ void loop() {
   int data[] = {analogRead(A0), analogRead(A1), analogRead(A2), analogRead(A3)};
 
   char buffer[128] = {0};
-  sprintf(buffer, "[%d, %d, %d, %d]\n", data[0], data[1], data[2], data[3]);
+  sprintf(buffer, "[%d]\n", data[0]);
   Serial.print(buffer);
 
-  if(Serial.available() > 0)
-  {
-    String cmd = Serial.readStringUntil('\n');
-    String data = Serial.readStringUntil('\n');
-    Serial.print("Received cmd: ");
-    Serial.print(cmd);
-    Serial.print("\n");
-
-    if(cmd.equals("CMD_NUMBER"))
-    {
-      int num = data.toInt();
-      Serial.print("Received number: ");
-      Serial.print(num);
-      Serial.print("\n");
-    }
-  }
+//  if(Serial.available() > 0)
+//  {
+//    String cmd = Serial.readStringUntil('\n');
+//    String data = Serial.readStringUntil('\n');
+//    Serial.print("Received cmd: ");
+//    Serial.print(cmd);
+//    Serial.print("\n");
+//
+//    if(cmd.equals("CMD_NUMBER"))
+//    {
+//      int num = data.toInt();
+//      Serial.print("Received number: ");
+//      Serial.print(num);
+//      Serial.print("\n");
+//    }
+//  }
   
   delay(500);
 }
