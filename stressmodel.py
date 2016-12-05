@@ -44,6 +44,7 @@ class StressModel():
         self.average = sum(self.data)/len(self.data)
 
     def getReadings(self, number_of_readings):
+        readData()
         if number_of_readings > len(self.data):
             number_of_readings = len(self.data)
         return self.data[number_of_readings:]
