@@ -23,14 +23,7 @@ class ArduinoInterface:
             return
 
         # Do something with line, e.g.
-        print(self.line)
-
-        cmd = 'CMD_NUMBER\n'
-        data = '1337\n'
-
-        # Maybe send something to Arduino
-        self.ser.write(cmd)
-        self.ser.write(data)
+        # print(self.line)
 
         return self.line
 

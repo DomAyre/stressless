@@ -1,4 +1,4 @@
-from arduinointerface import ArduinoInterface
+from arduinoInterface import ArduinoInterface
 
 class Reading():
     def __init__(self, data):
@@ -36,7 +36,7 @@ class StressModel():
 
     def readData(self):        
         self.data.add(self.interface.getData())
-        print(data)
+        print(self.data)
         # data = [0, [0,30,10]]           # placeholder for the future. Should read data from device
         # reading = Reading(data)
 
@@ -44,7 +44,7 @@ class StressModel():
         self.average = sum(self.data)/len(self.data)
 
     def getReadings(self, number_of_readings):
-        readData()
+        self.interface.readData()
         if number_of_readings > len(self.data):
             number_of_readings = len(self.data)
         return self.data[number_of_readings:]

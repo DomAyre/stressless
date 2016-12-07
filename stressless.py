@@ -34,7 +34,7 @@ class StressLevel():
 
     def saveModel(self, filename=False):
         if not filename:
-            filename = self.filename
+            filename = self.learn_file
         data = [str(k) + "," + ",".join(v) for (k, v) in self.model]
         with open(filename, 'wb') as csvfile:
             csvfile.writelines(data)
@@ -103,7 +103,7 @@ class StressLess():
         pass
 
     def adjust_threshold(self, squeeze_pressure_readings, non_squeeze_pressure_readings):
-        avg_squeeze_reading = sum(sum(r) for r in 2squeeze_pressure_readings)
+        avg_squeeze_reading = sum(sum(r) for r in squeeze_pressure_readings)
         avg_non_squeeze_reading = sum(sum(r) for r in non_squeeze_pressure_readings)
         self._device.setPressureThreshold((avg_squeeze_reading + avg_non_squeeze_reading) / 2)
 
@@ -121,7 +121,9 @@ class StressLess():
     def setSensorFrequency(self, frequency):
         self._device.setReadingFrequency()
 
-    def sendIFTT(self, command="turns_on", payload=[], key="dKx0NTPTbFi1jLPW3MlCxA"):
-        if len(payload) > 3:
+    def sendIFTT(self, command="turns_on", payload=(), key="dKx0NTPTbFi1jLPW3MlCxA"):
+        if not payload:
+            payload = []
+        elif len(payload) > 3:
             raise Exception('payload has to have up to 3 arguments')
         requests.post("https://maker.ifttt.com/trigger/{command}/with/key/{key}", data=payload)

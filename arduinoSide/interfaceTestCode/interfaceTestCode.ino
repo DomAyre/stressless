@@ -16,10 +16,13 @@ void setup() {
 // the loop routine runs over and over again forever:
 void loop() {
   // read the input on analog pin 0:
-  int data[] = {analogRead(A0), analogRead(A1), analogRead(A2), analogRead(A3)};
+  int data[] = {analogRead(A0) - 330, analogRead(A1) - 330, analogRead(A2) - 330, analogRead(A3) - 330, analogRead(A4)};
 
   char buffer[128] = {0};
-  sprintf(buffer, "[%d]\n", data[0]);
+  int ledVal = (int) 255 * ((float) (data[0] + 330) / 330);
+  sprintf(buffer, "0:[%d] [%d] [%d] [%d] debug %d, leg %d\n", 
+  data[0], data[1], data[2], data[3], data[4], ledVal);
+  analogWrite(9, ledVal);
   Serial.print(buffer);
 
 //  if(Serial.available() > 0)
@@ -39,5 +42,5 @@ void loop() {
 //    }
 //  }
   
-  delay(500);
+  delay(50);
 }
