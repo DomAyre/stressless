@@ -1,6 +1,6 @@
 import arduinoInterface as ard
 import sys
 
-interface = ard.ArduinoInterface(sys.argv[1])
+interface = ard.ArduinoInterface()
 while True:
     print(interface.getData())

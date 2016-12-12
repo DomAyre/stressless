@@ -35,16 +35,22 @@ class StressModel():
         return self.average
 
     def readData(self):        
-        self.data.add(self.interface.getData())
+        data = str(self.interface.getData().decode("utf-8"))
+        reading = Reading([int(el) for el in data.split(" ")])
+        print(reading.pressure)
+        self.data += reading
         print(self.data)
+
         # data = [0, [0,30,10]]           # placeholder for the future. Should read data from device
-        # reading = Reading(data)
+        #
 
     def set_average(self):
         self.average = sum(self.data)/len(self.data)
 
     def getReadings(self, number_of_readings):
-        self.interface.readData()
+        self.readData()
+        if number_of_readings > len(self.data):
+            return Reading([0])
         if number_of_readings > len(self.data):
             number_of_readings = len(self.data)
         return self.data[number_of_readings:]

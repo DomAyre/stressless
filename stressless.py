@@ -37,17 +37,16 @@ class StressLevel():
             filename = self.learn_file
         data = [str(k) + "," + ",".join(v) for (k, v) in self.model]
         with open(filename, 'wb') as csvfile:
-            csvfile.writelines(data)
+            csvfile.writelines("\n".join(data) + "\n")
 
     def addReading(self, stressLevel, pressures):
-        self.model[stressLevel] = tuple(pressures)
+        self.model[stressLevel] = self.model[stressLevel] + tuple(pressures)
 
 
 class StressLess():
     def __init__(self, filename="temp.learn"):
         self._device = StressModel()
-        self._activeProcesses = []
-        self._stressLevelModel = StressLevel(filename)
+        # self._stressLevelModel = StressLevel(filename)
 
     def getSensorReading(self):
         return self._device.getReadings(1)[0]
@@ -102,15 +101,19 @@ class StressLess():
             sensor_reading = self._device.getReadings(1)
         pass
 
-    def adjust_threshold(self, squeeze_pressure_readings, non_squeeze_pressure_readings):
-        avg_squeeze_reading = sum(sum(r) for r in squeeze_pressure_readings)
-        avg_non_squeeze_reading = sum(sum(r) for r in non_squeeze_pressure_readings)
-        self._device.setPressureThreshold((avg_squeeze_reading + avg_non_squeeze_reading) / 2)
+    def adjust_threshold(self, custom=False, squeeze_pressure_readings=False, non_squeeze_pressure_reading=False):
+        if custom:
+            self._device.setPressureThreshold((custom))
+        elif squeeze_pressure_readings and non_squeeze_pressure_reading:
+            try:
+                avg_squeeze_reading = sum(sum(r) for r in squeeze_pressure_readings)
+                avg_non_squeeze_reading = sum(sum(r) for r in non_squeeze_pressure_reading)
+                self._device.setPressureThreshold((avg_squeeze_reading + avg_non_squeeze_reading) / 2)
+            except TypeError:
+                print("Threshold not set. \
+                Format of pressure readings must be a list of lists containing numerical values.")
 
     # OUTPUT
-
-    def setLED(self, red, green, blue, alpha):
-        pass
 
     def turnOn(self):
         pass
