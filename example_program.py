@@ -3,9 +3,7 @@ import turtle
 
 
 def tuple_to_color(tup):
-    print(tup)
     col = '#%02x%02x%02x' % tup
-    print(col)
     return col
 
 # ball = sl.StressLess()
