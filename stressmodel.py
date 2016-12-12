@@ -3,7 +3,7 @@ from arduinoInterface import ArduinoInterface
 class Reading():
     def __init__(self, data):
         self.time = data[0]
-        self.pressure = list(data[0])  # list
+        self.pressure = data[1:]  # list
 
     def add(self, reading):
         self.time += reading[0]
@@ -18,7 +18,7 @@ class Reading():
 
 class StressModel():
     def __init__(self):
-        self.data = []  # list of Reading objects
+        self.data = list()  # list of Reading objects
         self.average = []
         self.frequency = 1
         self.threshold = 0
@@ -28,18 +28,20 @@ class StressModel():
         current_size = len(self.data)
         data = [0, [0, 30, 10]]  # placeholder for the future. Should read data from device
         reading = Reading(data)
-        self.data += reading
+        self.data.append(reading)
         self.average = self.average.add(reading).divide((current_size + 1) / current_size)
 
     def getSessionAvgReadings(self):
         return self.average
 
-    def readData(self):        
-        data = str(self.interface.getData().decode("utf-8"))
-        reading = Reading([int(el) for el in data.split(" ")])
-        print(reading.pressure)
-        self.data += reading
-        print(self.data)
+    def readData(self):
+        data = []
+        while not data:
+            data = self.interface.getData()
+            data = str(data.decode("utf-8"))
+            reading = [int(el) for el in data.split(" ")]
+            reading = Reading(reading)
+            self.data.append(reading)
 
         # data = [0, [0,30,10]]           # placeholder for the future. Should read data from device
         #
@@ -49,11 +51,11 @@ class StressModel():
 
     def getReadings(self, number_of_readings):
         self.readData()
-        if number_of_readings > len(self.data):
-            return Reading([0])
+        if len(self.data) == 0:
+            return [Reading([0,0,0,0,0])]
         if number_of_readings > len(self.data):
             number_of_readings = len(self.data)
-        return self.data[number_of_readings:]
+        return self.data[-number_of_readings:]
 
     def getReadingFrequency(self):
         return self.frequency

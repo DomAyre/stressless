@@ -23,8 +23,9 @@ class ArduinoInterface:
         # Line contains newline char
         self.line = self.line[0:-1]
 
-        if len(self.line) == 0:
-            return
+        while len(self.line) == 0:
+            self.line = self.ser.readline()
+            self.line = self.line[0:-1]
 
         # Do something with line, e.g.
         # print(self.line)

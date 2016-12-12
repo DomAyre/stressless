@@ -66,20 +66,22 @@ class StressLess():
             avgReading = Reading(avg)
         return avgReading
 
-    def getFrequency(self, number_of_readings=25):
+    def getFrequency(self, number_of_readings=100):
         readings = self._device.getReadings(number_of_readings)
-        time = readings[0].Time() - readings[-1].Time()
+        time = readings[-1].time - readings[0].time + 1
         threshold = self._device.getPressureThreshold()
 
         number_of_squeezes = 0
         activated = False
         for reading in readings:
-            if not activated and max(reading.pressure) > threshold:
+            if not activated and min(reading.pressure) > threshold:
                 activated = True
                 number_of_squeezes += 1
-            if activated and max(reading.pressure) < threshold:
+            if activated and min(reading.pressure) < threshold:
                 activated = False
-        return number_of_squeezes / time
+        frequency = 1000 * (number_of_squeezes / time)
+        print(frequency)
+        return 1000 * (number_of_squeezes / time)
 
     def getGripStrength(self, frequency=-1):
         pass
