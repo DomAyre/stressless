@@ -84,7 +84,8 @@ class StressLess():
         return 1000 * (number_of_squeezes / time)
 
     def getGripStrength(self, frequency=-1):
-        pass
+        reading = self._device.getReadings(1)
+        return sum(reading) / len(reading)
 
     def getPalmConfig(self, frequency=-1):
         reading = self._device.getReadings(1)[0]
