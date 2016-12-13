@@ -7,11 +7,12 @@ def tuple_to_color(tup):
     return col
 
 ball = sl.StressLess()
+ball.adjust_threshold(-10)
 i = 0
 while True:
     i = (i + 0.01) % 2
 
-    freq = ball.getFrequency(250)
+    freq = ball.getFrequency(100)
     freq = min(2, freq)
 
     wn = turtle.Screen()

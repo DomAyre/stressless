@@ -72,8 +72,8 @@ class StressLess():
         threshold = self._device.getPressureThreshold()
 
         number_of_squeezes = 0
-        activated = False
-        for reading in readings:
+        activated = min(readings[-1].pressure) > threshold
+        for reading in readings[::-1]:
             if not activated and min(reading.pressure) > threshold:
                 activated = True
                 number_of_squeezes += 1

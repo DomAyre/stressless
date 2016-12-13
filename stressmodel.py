@@ -35,10 +35,9 @@ class StressModel():
         return self.average
 
     def readData(self):
-        data = []
-        while not data:
-            data = self.interface.getData()
-            data = str(data.decode("utf-8"))
+        data = self.interface.getData()
+        data = str(data.decode("utf-8"))
+        if data:
             reading = [int(el) for el in data.split(" ")]
             reading = Reading(reading)
             self.data.append(reading)
